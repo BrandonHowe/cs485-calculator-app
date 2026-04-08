@@ -46,6 +46,23 @@ function Button({ className = '', onClick, children }) {
   )
 }
 
+function normalizeApiResponse(data) {
+  if (data && typeof data.result !== 'undefined') {
+    return data
+  }
+
+  if (data && typeof data.body === 'string') {
+    try {
+      const parsedBody = JSON.parse(data.body)
+      return parsedBody && typeof parsedBody === 'object' ? parsedBody : {}
+    } catch (error) {
+      return {}
+    }
+  }
+
+  return {}
+}
+
 function App() {
   const defaultUrl = 'https://e1j89cwifa.execute-api.us-east-2.amazonaws.com/test/CalculatorManager'
   const calculateApiUrl =
@@ -85,7 +102,8 @@ function App() {
           body: JSON.stringify({ expression })
         })
 
-        const data = await response.json()
+        const rawData = await response.json()
+        const data = normalizeApiResponse(rawData)
 
         if (!response.ok) {
           throw new Error(data.error || 'Failed to evaluate')
