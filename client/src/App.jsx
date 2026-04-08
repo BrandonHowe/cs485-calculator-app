@@ -47,6 +47,10 @@ function Button({ className = '', onClick, children }) {
 }
 
 function App() {
+  const defaultUrl = 'https://e1j89cwifa.execute-api.us-east-2.amazonaws.com/test/CalculatorManager'
+  const calculateApiUrl =
+    import.meta.env.VITE_CALC_API_URL ||
+    (import.meta.env.DEV ? '/api/calculate' : defaultUrl)
   const [expression, setExpression] = useState('')
   const [error, setError] = useState('')
 
@@ -75,7 +79,7 @@ function App() {
       }
 
       try {
-        const response = await fetch('/api/calculate', {
+        const response = await fetch(calculateApiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ expression })
