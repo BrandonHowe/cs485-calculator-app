@@ -11,7 +11,7 @@ applications:
           commands:
             - npx vite build --config client/vite.config.js
       artifacts:
-        baseDirectory: client/dist
+        baseDirectory: ../dist
         files:
           - "**/*"
       cache:
